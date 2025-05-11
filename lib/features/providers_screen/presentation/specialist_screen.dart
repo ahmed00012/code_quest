@@ -33,7 +33,7 @@ class _SpecialistsScreenState extends State<SpecialistsScreen> {
           return sl<SpecialistsBloc>()
             ..add(const FetchAllSpecialistsEvent())
             ..add(
-              const FetchAllSpecialistsEvent(),
+              const GetAppointmentsCountEvent(),
             );
         },
         child: BlocConsumer<SpecialistsBloc, SpecialistsState>(

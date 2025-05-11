@@ -142,12 +142,13 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                                       Spacer(),
                                       const Icon(
                                         Icons.calendar_today,
-                                        color: ColorManager.inActive,
+                                        color: ColorManager.subTitleColor,
+                                        size: 18,
                                       ),
                                       5.horizontalSpace,
                                       Text(
                                         appointment.date!.toFormattedDateTime(),
-                                        style: getHintStyle(fontSize: 0.018.sh),
+                                        style: getHintStyle(fontSize: 0.016.sh,color: ColorManager.subTitleColor)
                                       ),
                                     ],
                                   ),

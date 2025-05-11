@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../../core/local_storage/storage_helper.dart';
+import '../../../../core/utils/constants.dart';
 import '../models/specialist_model.dart';
 
 abstract class SpecialistsRemoteDataSource {
@@ -29,7 +31,9 @@ class SpecialistsRemoteDataSourceImpl implements SpecialistsRemoteDataSource {
   Future<int> appointmentsCount() async {
     try {
       final snapshot =
-      await FirebaseFirestore.instance.collection('appointments').count().get();
+      await FirebaseFirestore.instance.collection('appointments')
+          .where('user', isEqualTo: LocalStorage.getData(key: Constants.loggedInUser))
+          .count().get();
       return snapshot.count ?? 0;
     } catch (e) {
       throw Exception('Failed to load specialists: $e');
