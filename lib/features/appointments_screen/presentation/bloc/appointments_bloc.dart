@@ -19,30 +19,33 @@ class AppointmentsBloc extends Bloc<AppointmentsEvent, AppointmentsState> {
       result.fold((failure) {
         emit(AppointmentsErrorState(failure.message));
       }, (appointments) {
+        appointments.forEach((element) {
+          if (DateTime.parse(element.date!).isAfter(DateTime.now())) {
+            add(DeleteAppointmentEvent(appointmentId: element.id, isClear: true));
+          }
+        });
         emit(AppointmentsSuccessState(appointments: appointments));
       });
     });
     on<UpdateAppointmentEvent>((event, emit) async {
       emit(UpdateAppointmentLoadingState());
       final result = await appointmentsRepository.updateAppointment(
-          date: event.date,
-          appointmentId: event.appointmentId);
+          date: event.date, appointmentId: event.appointmentId);
       result.fold((failure) {
         emit(UpdateAppointmentErrorState(failure.message));
       }, (specialists) {
         emit(UpdateAppointmentSuccessState(
-            date: event.date,
-            appointmentId: event.appointmentId
-        ));
+            date: event.date, appointmentId: event.appointmentId));
       });
     });
     on<DeleteAppointmentEvent>((event, emit) async {
       emit(DeleteAppointmentLoadingState());
-      final result = await appointmentsRepository.deleteAppointment(appointmentId: event.appointmentId);
+      final result = await appointmentsRepository.deleteAppointment(
+          appointmentId: event.appointmentId);
       result.fold((failure) {
         emit(DeleteAppointmentErrorState(failure.message));
       }, (specialists) {
-        emit(DeleteAppointmentSuccessState(appointmentId: event.appointmentId));
+        emit(DeleteAppointmentSuccessState(appointmentId: event.appointmentId,isClear: event.isClear));
       });
     });
   }

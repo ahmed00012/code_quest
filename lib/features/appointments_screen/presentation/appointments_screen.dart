@@ -47,10 +47,12 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
           }
 
           if (state is DeleteAppointmentSuccessState) {
-            PopupDialogs.showToast(
-              "Appointment Deleted Successfully",
-            );
-            Navigator.pop(context);
+            if(!state.isClear) {
+              PopupDialogs.showToast(
+                "Appointment Deleted Successfully",
+              );
+              Navigator.pop(context);
+            }
             appointments.removeWhere((e) => e.id == state.appointmentId);
           }
           if (state is DeleteAppointmentErrorState) {

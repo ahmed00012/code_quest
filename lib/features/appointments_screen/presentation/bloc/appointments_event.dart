@@ -21,6 +21,7 @@ class UpdateAppointmentEvent extends AppointmentsEvent {
 
 class DeleteAppointmentEvent extends AppointmentsEvent {
   final String appointmentId;
+  final bool isClear;
   const DeleteAppointmentEvent(
-      {required this.appointmentId});
+      {required this.appointmentId, this.isClear = false});
 }

@@ -1,3 +1,5 @@
+import 'package:code_quest/core/local_storage/storage_helper.dart';
+import 'package:code_quest/core/utils/constants.dart';
 import 'package:code_quest/core/utils/extension.dart';
 import 'package:code_quest/core/utils/popup_dialogs.dart';
 import 'package:code_quest/shared_widgets/custom_button.dart';
@@ -98,7 +100,6 @@ class _SpecialistBottomSheetState extends State<SpecialistBottomSheet> {
                                 selectedDate!.toFormattedDateTime(),
                                 style: getRegularStyle(fontSize: 0.016.sh),
                               ),
-
                           ],
                         ),
                       ),
@@ -110,7 +111,7 @@ class _SpecialistBottomSheetState extends State<SpecialistBottomSheet> {
                               horizontal: 24.0, vertical: 16),
                           child: InkWell(
                             onTap: () {
-                              if(widget.specialist.availability[i].available) {
+                              if (widget.specialist.availability[i].available) {
                                 setState(() {
                                   selectedDate =
                                       widget.specialist.availability[i].date;
@@ -122,13 +123,14 @@ class _SpecialistBottomSheetState extends State<SpecialistBottomSheet> {
                                 if (widget.specialist.availability[i].date !=
                                     null)
                                   Text(
-                                   widget.specialist.availability[i].date!.toFormattedDateTime(),
-                                    style: getRegularStyle(fontSize: 0.016.sh).copyWith(
-                                      decoration:
-                                      widget.specialist.availability[i].available?
-                                      null : TextDecoration.lineThrough
-                                    ),
-
+                                    widget.specialist.availability[i].date!
+                                        .toFormattedDateTime(),
+                                    style: getRegularStyle(fontSize: 0.016.sh)
+                                        .copyWith(
+                                            decoration: widget.specialist
+                                                    .availability[i].available
+                                                ? null
+                                                : TextDecoration.lineThrough),
                                   ),
                               ],
                             ),
@@ -155,28 +157,36 @@ class _SpecialistBottomSheetState extends State<SpecialistBottomSheet> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: DefaultButton(
-                  fontSize: 0.02.sh,
-                  radius: 12,
-                  height: 0.06.sh,
-                  width: 1.sw,
-                  color: ColorManager.primary,
-                  textStyle: getMediumStyle(color: Colors.white),
-                  title: 'Make Appointment',
-                  onTap: () {
-                    if (selectedDate == null) {
-                      PopupDialogs.showToast(
-                        "Please select date",
-                      );
-                    } else {
-                      widget.onMakeAppointment.call(
-                        selectedDate!,
-                      );
-                      setState(() {
-                        loading = true;
-                      });
-                    }
-                  },
-                ),
+                    fontSize: 0.02.sh,
+                    radius: 12,
+                    height: 0.06.sh,
+                    width: 1.sw,
+                    color: ColorManager.primary,
+                    textStyle: getMediumStyle(color: Colors.white),
+                    title: 'Make Appointment',
+                    onTap: () {
+                      if (selectedDate == null) {
+                        PopupDialogs.showToast(
+                          "Please select date",
+                        );
+                      } else {
+                        int limit =
+                            LocalStorage.getData(key: Constants.limit) ?? 0;
+                        if (limit < 5) {
+                          LocalStorage.saveData(
+                              key: Constants.limit, value: limit + 1);
+                          widget.onMakeAppointment.call(
+                            selectedDate!,
+                          );
+                          setState(() {
+                            loading = true;
+                          });
+                        } else {
+                          PopupDialogs.showToast(
+                              "You have reached the maximum number of appointments");
+                        }
+                      }
+                    }),
               ),
             )
         ],

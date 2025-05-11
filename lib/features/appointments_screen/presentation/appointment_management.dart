@@ -204,23 +204,14 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                       radius: 12,
                       height: 0.06.sh,
                       width: 0.42.sw,
-                      color: DateTime.parse(selectedDate!).day <
-                                  DateTime.now().day ||
-                              DateTime.parse(selectedDate!).month <
-                                  DateTime.now().month ||
-                              DateTime.parse(selectedDate!).year <
-                                  DateTime.now().year
-                          ? ColorManager.inActive
-                          : ColorManager.redSelected,
+                      color: ColorManager.redSelected,
                       textStyle: getMediumStyle(color: Colors.white),
                       title: 'Cancel Appointment',
                       onTap: () {
-                        if (DateTime.parse(selectedDate!).day >
-                                DateTime.now().day ||
-                            DateTime.parse(selectedDate!).month >
-                                DateTime.now().month ||
-                            DateTime.parse(selectedDate!).year >
-                                DateTime.now().year) {
+                        if (DateTime.parse(selectedDate!)
+                                .difference(DateTime.now())
+                                .inDays >
+                            1) {
                           widget.onDelete.call();
                         } else {
                           PopupDialogs.showToast(

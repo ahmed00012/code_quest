@@ -1,8 +1,6 @@
-
 import 'package:equatable/equatable.dart';
 
 import '../../data/models/appointments_model.dart';
-
 
 abstract class AppointmentsState extends Equatable {
   @override
@@ -10,9 +8,10 @@ abstract class AppointmentsState extends Equatable {
   const AppointmentsState();
 }
 
+class InitAppointmentsState extends AppointmentsState {}
 
- class InitAppointmentsState extends AppointmentsState {}
 class AppointmentsLoadingState extends AppointmentsState {}
+
 class AppointmentsErrorState extends AppointmentsState {
   final String message;
   const AppointmentsErrorState(this.message);
@@ -24,6 +23,7 @@ class AppointmentsSuccessState extends AppointmentsState {
   @override
   List<Object?> get props => [appointments];
 }
+
 class UpdateAppointmentLoadingState extends AppointmentsState {}
 
 class UpdateAppointmentErrorState extends AppointmentsState {
@@ -35,8 +35,7 @@ class UpdateAppointmentSuccessState extends AppointmentsState {
   final String date;
   final String appointmentId;
   const UpdateAppointmentSuccessState(
-      {required this.date,
-        required this.appointmentId});
+      {required this.date, required this.appointmentId});
 }
 
 class DeleteAppointmentLoadingState extends AppointmentsState {}
@@ -48,5 +47,9 @@ class DeleteAppointmentErrorState extends AppointmentsState {
 
 class DeleteAppointmentSuccessState extends AppointmentsState {
   final String appointmentId;
-  const DeleteAppointmentSuccessState({required this.appointmentId});
+  final bool isClear;
+  const DeleteAppointmentSuccessState({
+    required this.appointmentId,
+    this.isClear = false,
+  });
 }
