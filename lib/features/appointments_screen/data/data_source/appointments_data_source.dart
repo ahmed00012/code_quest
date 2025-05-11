@@ -38,7 +38,7 @@ class AppointmentsRemoteDataSourceImpl implements AppointmentsRemoteDataSource {
       throw Exception('Failed to load specialists: $e');
     }
   }
-
+  @override
   Future<void> updateAppointment({
     required String appointmentId,
     required String date,
@@ -52,7 +52,7 @@ class AppointmentsRemoteDataSourceImpl implements AppointmentsRemoteDataSource {
       throw Exception('Failed to update appointment: $e');
     }
   }
-
+  @override
   Future<void> deleteAppointment(String appointmentId) async {
     try {
       await FirebaseFirestore.instance

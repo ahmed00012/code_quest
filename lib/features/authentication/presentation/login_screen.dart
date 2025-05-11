@@ -24,94 +24,98 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
+        backgroundColor: ColorManager.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              CustomTextField(
-                label: 'Email',
-                hint: 'Enter your email',
-                email: true,
-                validator: (value) => value!.validateEmail(context),
-              ),
-              const SizedBox(height: 16),
-              CustomTextField(
-                label: 'Password',
-                hint: 'Enter your password',
-                controller: passwordController,
-                validator: (value) => value!.validatePassword(context),
-              ),
-              const SizedBox(height: 50),
-              DefaultButton(
-                title: 'Login',
-                fontSize: 16,
-                radius: 8,
-                color: ColorManager.primary,
-                textColor: Colors.white,
-                onTap: () {
-
-                  if (formKey.currentState?.validate() ?? false) {
-
-                    bool isRegistered = false;
-                   String userName = '';
-                    List<String>? emails =
-                        LocalStorage.getData(key: Constants.registeredEmails);
-
-                    emails?.forEach((e) {
-                      List<String> text = e.replaceAll(' ', '').split('/');
-                      if (text[0] == emailController.text ||
-                          text[1] == passwordController.text) {
-                        userName = text[2];
-                        isRegistered = true;
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                CustomTextField(
+                  label: 'Email',
+                  hint: 'Enter your email',
+                  email: true,
+                  validator: (value) => value!.validateEmail(context),
+                ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  label: 'Password',
+                  hint: 'Enter your password',
+                  password: true,
+                  controller: passwordController,
+                  validator: (value) => value!.validatePassword(context),
+                ),
+                const SizedBox(height: 50),
+                DefaultButton(
+                  title: 'Login',
+                  fontSize: 16,
+                  radius: 8,
+                  color: ColorManager.primary,
+                  textColor: Colors.white,
+                  onTap: () {
+            
+                    if (formKey.currentState?.validate() ?? false) {
+            
+                      bool isRegistered = false;
+                     String userName = '';
+                      List<String>? emails =
+                          LocalStorage.getData(key: Constants.registeredEmails);
+            
+                      emails?.forEach((e) {
+                        List<String> text = e.replaceAll(' ', '').split('/');
+                        if (text[0] == emailController.text ||
+                            text[1] == passwordController.text) {
+                          userName = text[2];
+                          isRegistered = true;
+                        }
+                      });
+                      if (isRegistered) {
+                        LocalStorage.saveData(
+                            key: Constants.loggedInEmail,
+                            value: emailController.text);
+                        LocalStorage.saveData(
+                            key: Constants.loggedInUser,
+                            value: userName);
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (_) => HomeScreen()),
+                            (Route<dynamic> route) => false);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Invalid email or password'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
                       }
-                    });
-                    if (isRegistered) {
-                      LocalStorage.saveData(
-                          key: Constants.loggedInEmail,
-                          value: emailController.text);
-                      LocalStorage.saveData(
-                          key: Constants.loggedInUser,
-                          value: userName);
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (_) => HomeScreen()),
-                          (Route<dynamic> route) => false);
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Invalid email or password'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
                     }
-                  }
-                },
-              ),
-              30.verticalSpace,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Do not have an account?',
-                    style: getRegularStyle(),
-                  ),
-                  5.horizontalSpace,
-                  InkWell(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => SignUpScreen()));
-                      },
-                      child: Text(
-                        'Sign up',
-                        style: getSemiBoldStyle(color: ColorManager.primary),
-                      )),
-                ],
-              ),
-            ],
+                  },
+                ),
+                30.verticalSpace,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Do not have an account?',
+                      style: getRegularStyle(),
+                    ),
+                    5.horizontalSpace,
+                    InkWell(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => SignUpScreen()));
+                        },
+                        child: Text(
+                          'Sign up',
+                          style: getSemiBoldStyle(color: ColorManager.primary),
+                        )),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
