@@ -20,7 +20,7 @@ class AppointmentsBloc extends Bloc<AppointmentsEvent, AppointmentsState> {
         emit(AppointmentsErrorState(failure.message));
       }, (appointments) {
         appointments.forEach((element) {
-          if (DateTime.parse(element.date!).isAfter(DateTime.now())) {
+          if (DateTime.now().isAfter(DateTime.parse(element.date!))) {
             add(DeleteAppointmentEvent(appointmentId: element.id, isClear: true));
           }
         });

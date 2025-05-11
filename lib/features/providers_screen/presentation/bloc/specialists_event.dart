@@ -11,6 +11,9 @@ abstract class SpecialistsEvent extends Equatable {
 class FetchAllSpecialistsEvent extends SpecialistsEvent {
   const FetchAllSpecialistsEvent();
 }
+class GetAppointmentsCountEvent extends SpecialistsEvent {
+  const GetAppointmentsCountEvent();
+}
 
 class BookAppointmentEvent extends SpecialistsEvent {
   final String user;

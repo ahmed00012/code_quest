@@ -13,9 +13,10 @@ import '../data/models/specialist_model.dart';
 
 class SpecialistBottomSheet extends StatefulWidget {
   final SpecialistModel specialist;
+  final int limit;
   final Function(String) onMakeAppointment;
   const SpecialistBottomSheet(
-      {super.key, required this.specialist, required this.onMakeAppointment});
+      {super.key, required this.specialist, required this.onMakeAppointment, this.limit = 0});
 
   @override
   State<SpecialistBottomSheet> createState() => _SpecialistBottomSheetState();
@@ -170,11 +171,8 @@ class _SpecialistBottomSheetState extends State<SpecialistBottomSheet> {
                           "Please select date",
                         );
                       } else {
-                        int limit =
-                            LocalStorage.getData(key: Constants.limit) ?? 0;
-                        if (limit < 5) {
-                          LocalStorage.saveData(
-                              key: Constants.limit, value: limit + 1);
+
+                        if (widget.limit < 5) {
                           widget.onMakeAppointment.call(
                             selectedDate!,
                           );

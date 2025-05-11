@@ -35,3 +35,16 @@ class MakeAppointmentSuccessState extends SpecialistsState {
   const MakeAppointmentSuccessState();
 }
 
+class AppointmentsCountLoadingState extends SpecialistsState {}
+
+class AppointmentsCountErrorState extends SpecialistsState {
+  final String message;
+  const AppointmentsCountErrorState(this.message);
+}
+
+class AppointmentsCountSuccessState extends SpecialistsState {
+  final int appointmentsCount;
+  const AppointmentsCountSuccessState({required this.appointmentsCount});
+  @override
+  List<Object?> get props => [appointmentsCount];
+}

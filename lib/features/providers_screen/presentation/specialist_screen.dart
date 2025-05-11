@@ -23,14 +23,18 @@ class SpecialistsScreen extends StatefulWidget {
 
 class _SpecialistsScreenState extends State<SpecialistsScreen> {
   List<SpecialistModel> specialists = [];
-  bool loadingBookAppointment = false;
+  int limit = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
         create: (context) {
-          return sl<SpecialistsBloc>()..add(const FetchAllSpecialistsEvent());
+          return sl<SpecialistsBloc>()
+            ..add(const FetchAllSpecialistsEvent())
+            ..add(
+              const FetchAllSpecialistsEvent(),
+            );
         },
         child: BlocConsumer<SpecialistsBloc, SpecialistsState>(
             listener: (BuildContext context, state) {
@@ -55,6 +59,9 @@ class _SpecialistsScreenState extends State<SpecialistsScreen> {
             PopupDialogs.showToast(state.message);
             Navigator.pop(context);
           }
+          if (state is AppointmentsCountSuccessState) {
+            limit = state.appointmentsCount;
+          }
         }, builder: (context, state) {
           SpecialistsBloc specialistsBloc = context.read<SpecialistsBloc>();
           return SizedBox(
@@ -65,71 +72,77 @@ class _SpecialistsScreenState extends State<SpecialistsScreen> {
               children: [
                 if (state is SpecialistsLoadingState)
                   const Center(
-                    child: CircularProgressIndicator(color: ColorManager.primaryColor,),
+                    child: CircularProgressIndicator(
+                      color: ColorManager.primaryColor,
+                    ),
                   )
                 else
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: specialists.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      final specialist = specialists[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: 1.sw,
-                          height: 0.1.sh,
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: ColorManager.lightPrimary,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: InkWell(
-                            onTap: () {
-                              showModalBottomSheet(
-                                  context: context,
-                                  isScrollControlled: true,
-                                  builder: (context) {
-                                    return SpecialistBottomSheet(
-                                      specialist: specialist,
-                                      onMakeAppointment: (date) {
-                                        specialistsBloc.add(BookAppointmentEvent(
-                                          specialistModel: specialist,
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: specialists.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        final specialist = specialists[index];
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: 1.sw,
+                            height: 0.1.sh,
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: ColorManager.lightPrimary,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    builder: (context) {
+                                      return SpecialistBottomSheet(
+                                        specialist: specialist,
+                                        limit: limit,
+                                        onMakeAppointment: (date) {
+                                          specialistsBloc
+                                              .add(BookAppointmentEvent(
+                                            specialistModel: specialist,
                                             specialistId: specialist.id,
-                                            user: LocalStorage.getData(key: Constants.loggedInUser),
-                                            date: date,));
-                                      },
-                                    );
-                                  });
-                            },
-                            child: Row(
-                              children: [
-                                ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.network(
-                                      specialist.image,
-                                      height: 60,
-                                      width: 60,
-                                    )),
-                                5.horizontalSpace,
-                                Expanded(
-                                  child: ListTile(
-                                    title: Text(specialist.name,
-                                        style:
-                                            getSemiBoldStyle(fontSize: 0.018.sh)),
-                                    subtitle: Text(specialist.specialization,
-                                        style:
-                                            getRegularStyle(fontSize: 0.016.sh)),
+                                            user: LocalStorage.getData(
+                                                key: Constants.loggedInUser),
+                                            date: date,
+                                          ));
+                                        },
+                                      );
+                                    });
+                              },
+                              child: Row(
+                                children: [
+                                  ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                        specialist.image,
+                                        height: 60,
+                                        width: 60,
+                                      )),
+                                  5.horizontalSpace,
+                                  Expanded(
+                                    child: ListTile(
+                                      title: Text(specialist.name,
+                                          style: getSemiBoldStyle(
+                                              fontSize: 0.018.sh)),
+                                      subtitle: Text(specialist.specialization,
+                                          style: getRegularStyle(
+                                              fontSize: 0.016.sh)),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
-                ),
               ],
             ),
           );

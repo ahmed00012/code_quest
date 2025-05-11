@@ -4,6 +4,7 @@ import '../models/specialist_model.dart';
 
 abstract class SpecialistsRemoteDataSource {
   Future<List<SpecialistModel>> fetchSpecialists();
+  Future<int> appointmentsCount();
   Future<bool> bookAppointment({
     required String user,
     required String date,
@@ -19,6 +20,17 @@ class SpecialistsRemoteDataSourceImpl implements SpecialistsRemoteDataSource {
       final snapshot =
           await FirebaseFirestore.instance.collection('specialists').get();
       return snapshot.docs.map((doc) => SpecialistModel.fromJson(doc)).toList();
+    } catch (e) {
+      throw Exception('Failed to load specialists: $e');
+    }
+  }
+
+  @override
+  Future<int> appointmentsCount() async {
+    try {
+      final snapshot =
+      await FirebaseFirestore.instance.collection('appointments').count().get();
+      return snapshot.count ?? 0;
     } catch (e) {
       throw Exception('Failed to load specialists: $e');
     }

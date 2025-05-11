@@ -11,6 +11,16 @@ class SpecialistsBloc extends Bloc<SpecialistsEvent, SpecialistsState> {
   SpecialistsBloc({
     required this.specialistsRepository,
   }) : super(InitSpecialistsState()) {
+    on<GetAppointmentsCountEvent>((event, emit) async {
+      emit(AppointmentsCountLoadingState());
+      final result = await specialistsRepository.appointmentsCount();
+      result.fold((failure) {
+        emit(AppointmentsCountErrorState(failure.message));
+      }, (count) {
+        emit(AppointmentsCountSuccessState(appointmentsCount: count));
+      });
+    });
+
     on<FetchAllSpecialistsEvent>((event, emit) async {
       emit(SpecialistsLoadingState());
       final result = await specialistsRepository.getSpecialists();

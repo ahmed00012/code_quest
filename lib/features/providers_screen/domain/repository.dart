@@ -10,6 +10,7 @@ abstract class SpecialistsRepository {
       required String date,
       required String specialistId,
         required SpecialistModel specialistModel});
+  Future<Either<Failure, int>> appointmentsCount();
 }
 
 class SpecialistsRepositoryImpl implements SpecialistsRepository {
@@ -21,12 +22,21 @@ class SpecialistsRepositoryImpl implements SpecialistsRepository {
 
   @override
   Future<Either<Failure, List<SpecialistModel>>> getSpecialists() async {
-    // try {
+    try {
     final response = await _remoteDataSource.fetchSpecialists();
     return Right(response);
-    // } catch (error) {
-    //   return Left(Failure(message: error.toString(), code: 500));
-    // }
+    } catch (error) {
+      return Left(Failure(message: error.toString(), code: 500));
+    }
+  }
+  @override
+  Future<Either<Failure, int>> appointmentsCount() async {
+    try {
+    final response = await _remoteDataSource.appointmentsCount();
+    return Right(response);
+    } catch (error) {
+      return Left(Failure(message: error.toString(), code: 500));
+    }
   }
 
   @override

@@ -20,6 +20,7 @@ class CustomTextField extends StatefulWidget {
         this.validator,
         this.height,
         this.email = false,
+        this.password = false,
         this.suffixIcon,
         this.hint, this.prefixIcon})
       : super(key: key);
@@ -29,6 +30,7 @@ class CustomTextField extends StatefulWidget {
   final double width;
   final bool? number;
   final bool? email;
+  final bool? password;
   final bool? description;
   final bool enabled;
   final Color? disabledColor;
@@ -91,6 +93,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 cursorColor: ColorManager.primary,
                 enabled: widget.enabled,
                 style: getBoldStyle(),
+                obscureText: widget.password == true,
                 keyboardType: widget.number != null
                     ? TextInputType.number
                     : widget.email == true

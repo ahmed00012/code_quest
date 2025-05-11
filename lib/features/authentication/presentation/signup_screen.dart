@@ -7,6 +7,7 @@ import 'package:code_quest/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../core/utils/popup_dialogs.dart';
 import '../../../shared_widgets/custom_button.dart';
 import '../../../shared_widgets/custom_text_field.dart';
 
@@ -57,6 +58,7 @@ class SignUpScreen extends StatelessWidget {
               CustomTextField(
                 label: 'Password',
                 hint: 'Enter your password',
+                password: true,
                 controller: passwordController,
                 validator: (value) => value!.validatePassword(context),
               ),
@@ -64,6 +66,7 @@ class SignUpScreen extends StatelessWidget {
               CustomTextField(
                 label: 'Confirm Password',
                 hint: 'Confirm password',
+                password: true,
                 controller: confirmPasswordController,
                 validator: (value) => value!.validatePasswordConfirm(context,
                     pass: passwordController.text),
@@ -83,6 +86,9 @@ class SignUpScreen extends StatelessWidget {
                     LocalStorage.saveStringListData(
                         key: Constants.registeredEmails, value: emails);
                     Navigator.pop(context);
+                    PopupDialogs.showToast(
+                      'Account created successfully',
+                    );
                   }
                 },
               ),
