@@ -13,11 +13,21 @@ import '../../../shared_widgets/custom_button.dart';
 import '../../../shared_widgets/custom_text_field.dart';
 import '../../providers_screen/presentation/specialist_screen.dart';
 
-class LoginScreen extends StatelessWidget {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+
+  final TextEditingController passwordController = TextEditingController();
+
+  final formKey = GlobalKey<FormState>();
+
+  bool showPassword = false;
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +52,27 @@ class LoginScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 CustomTextField(
-                  label: 'Password',
-                  hint: 'Enter your password',
-                  password: true,
-                  controller: passwordController,
-                  validator: (value) => value!.validatePassword(context),
-                ),
+                    label: 'Password',
+                    hint: 'Enter your password',
+                    password: !showPassword,
+                    controller: passwordController,
+                    validator: (value) => value!.validatePassword(context),
+                    suffixIcon: InkWell(
+                      onTap: () {
+                        setState(() {
+                          showPassword = !showPassword;
+                        });
+                      },
+                      child: showPassword
+                          ? Icon(
+                              Icons.remove_red_eye_outlined,
+                              color: ColorManager.divider,
+                            )
+                          : Icon(
+                              Icons.remove_red_eye,
+                              color: ColorManager.divider,
+                            ),
+                    )),
                 const SizedBox(height: 50),
                 DefaultButton(
                   title: 'Login',
@@ -56,14 +81,12 @@ class LoginScreen extends StatelessWidget {
                   color: ColorManager.primary,
                   textColor: Colors.white,
                   onTap: () {
-            
                     if (formKey.currentState?.validate() ?? false) {
-            
                       bool isRegistered = false;
-                     String userName = '';
+                      String userName = '';
                       List<String>? emails =
                           LocalStorage.getData(key: Constants.registeredEmails);
-            
+
                       emails?.forEach((e) {
                         List<String> text = e.replaceAll(' ', '').split('/');
                         if (text[0] == emailController.text ||
@@ -77,8 +100,7 @@ class LoginScreen extends StatelessWidget {
                             key: Constants.loggedInEmail,
                             value: emailController.text);
                         LocalStorage.saveData(
-                            key: Constants.loggedInUser,
-                            value: userName);
+                            key: Constants.loggedInUser, value: userName);
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (_) => HomeScreen()),
@@ -105,8 +127,10 @@ class LoginScreen extends StatelessWidget {
                     5.horizontalSpace,
                     InkWell(
                         onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => SignUpScreen()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => SignUpScreen()));
                         },
                         child: Text(
                           'Sign up',

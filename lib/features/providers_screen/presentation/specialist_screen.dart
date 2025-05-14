@@ -14,15 +14,11 @@ import 'bloc/specialists_bloc.dart';
 import 'bloc/specialists_event.dart';
 import 'package:intl/intl.dart';
 
-class SpecialistsScreen extends StatefulWidget {
+class SpecialistsScreen extends StatelessWidget {
   SpecialistsScreen({super.key});
 
-  @override
-  State<SpecialistsScreen> createState() => _SpecialistsScreenState();
-}
-
-class _SpecialistsScreenState extends State<SpecialistsScreen> {
   List<SpecialistModel> specialists = [];
+
   int limit = 0;
 
   @override
@@ -70,7 +66,7 @@ class _SpecialistsScreenState extends State<SpecialistsScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (state is SpecialistsLoadingState)
+                if (state is SpecialistsLoadingState || state is AppointmentsCountLoadingState)
                   const Center(
                     child: CircularProgressIndicator(
                       color: ColorManager.primaryColor,

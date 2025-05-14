@@ -66,7 +66,7 @@ class _SpecialistBottomSheetState extends State<SpecialistBottomSheet> {
                     ),
                   ],
                 ),
-                5.verticalSpace,
+                25.verticalSpace,
                 Center(
                   child: Text(widget.specialist.bio,
                       textAlign: TextAlign.center,
@@ -74,7 +74,7 @@ class _SpecialistBottomSheetState extends State<SpecialistBottomSheet> {
                           fontSize: 0.018.sh,
                           color: ColorManager.subTitleColor)),
                 ),
-                15.verticalSpace,
+                25.verticalSpace,
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ExpansionTile(

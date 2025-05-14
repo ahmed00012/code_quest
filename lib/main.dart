@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
             backgroundColor: Colors.white,
           ),
         ),
-        home: LocalStorage.getData(key: Constants.registeredEmails) != null
+        home: LocalStorage.getData(key: Constants.loggedInUser) != null
             ? const HomeScreen()
             : LoginScreen(),
       ),

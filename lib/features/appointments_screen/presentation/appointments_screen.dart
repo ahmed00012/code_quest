@@ -16,15 +16,11 @@ import 'package:intl/intl.dart';
 
 import 'bloc/appointments_state.dart';
 
-class AppointmentsScreen extends StatefulWidget {
-  const AppointmentsScreen({super.key});
+class AppointmentsScreen extends StatelessWidget {
+   AppointmentsScreen({super.key});
 
-  @override
-  State<AppointmentsScreen> createState() => _AppointmentsScreenState();
-}
-
-class _AppointmentsScreenState extends State<AppointmentsScreen> {
   List<AppointmentsModel> appointments = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

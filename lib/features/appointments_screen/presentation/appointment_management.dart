@@ -75,7 +75,7 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                     ),
                   ],
                 ),
-                5.verticalSpace,
+                25.verticalSpace,
                 Center(
                   child: Text(widget.appointment.specialist!.bio,
                       textAlign: TextAlign.center,
@@ -83,7 +83,7 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                           fontSize: 0.018.sh,
                           color: ColorManager.subTitleColor)),
                 ),
-                15.verticalSpace,
+                25.verticalSpace,
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ExpansionTile(
